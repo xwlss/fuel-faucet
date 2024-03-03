@@ -2,10 +2,11 @@
 
 1.脚本使用yescaptcha过验证码，需要注册并获取key。没有的可以注册[yescaptcha register](https://yescaptcha.com/i/46I8ZF)。
 
-2.将获取的key在faucet.py文件中替换232行中yes_key='XXX' 的XXX
+2.将获取的key在faucet.py文件中替换232行中yes_key='XXX' 的XXX ，修改n为一次想要生成和领水的地址数量。
 
 3.在python3.10版本下运行 python3 faucet.py，如果显示Error：No module named 'XXX' ,请在cmd下运行 pip install XXX，如果是别的报错请自己查询谷歌或者百度，windows下似乎比较麻烦，涉及问题较多，大家自行尝试，mac和linux下运行较为顺畅。
 
+4.运行完成后相关地址、私钥和助记词都会保存在fuel-wallet.txt文件中，请妥善保存。
 
 # fuelwallet-py
 python for blockchain fuel official wallet, suport use mnemonic seeds generate fuel address and private key
