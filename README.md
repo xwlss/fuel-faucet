@@ -1,4 +1,5 @@
 ##领水使用教程
+
 1.脚本使用yescaptcha过验证码，需要注册并获取key。没有的可以注册[yescaptcha register](https://yescaptcha.com/i/46I8ZF)。
 
 2.将获取的key在faucet.py文件中替换232行中yes_key='XXX' 的XXX
