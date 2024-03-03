@@ -73,6 +73,7 @@ address index 4, address: fuel1vqn9mu84v8keec0u8fge8295epr5mn6c74nwekyqn5yspgn8h
 
 ## faucet
 use yescaptcha to solver captcha
+if you dont have YesCaptcha account yet, you can register here：[yescaptcha register](https://yescaptcha.com/i/46I8ZF)。
 
 # last but important!
 1. test the result and compare it with main web wallet app(such as: metamask, mathwallet, trustwallet...) before you deposit crypto assets to the address
