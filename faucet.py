@@ -231,18 +231,25 @@ if __name__ == '__main__':
         #没有yescaptcha过验证码网站的可以在 https://yescaptcha.com/i/46I8ZF 上注册获取
         yes_key='XXX'
         captcha=get_yescaptcha_google_token(yes_key)
-
+        
+        #更新代理 需要自行购买或者配置 目前市场上很多 大家按自己需要使用
+        #以nstproxy示例 
+        #在nstproxy网站上注册获取 nstproxy_Channel 和 nstproxy_Password
+        #nstproxy_Channel='XXX'
+        #nstproxy_Password='XXX'
+        #nstproxies = f"http://{nstproxy_Channel}-residential-country_ANY-r_5m-s_BsqLCLkiVu:{nstproxy_Password}@gw-us.nstproxy.com:24125"
+        #proxies = {'all://': nstproxy}
+        proxies = {'all://': 'http://127.0.0.1:12345'}#以你的代理服务网址或ip和端口替换127.0.0.1:12345
+        
         #print(captcha)
         json_data = {
                 'address': address,
                 'captcha': captcha
                     }
     
-        response = requests.post('https://faucet-beta-5.fuel.network/dispense', headers=headers, json=json_data)
+        response = requests.post('https://faucet-beta-5.fuel.network/dispense',proxies=proxies, verify=False,headers=headers, json=json_data)
         print(response.text)
         
         with open('./fuel-wallet.txt', 'a') as f:
             #将领过水的地址、私钥和助记词保存在fuel-wallet.txt文件中
             f.writelines(address+':'+pk+':'+mnemonic+'\n')
-          
-            
