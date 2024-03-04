@@ -222,34 +222,37 @@ if __name__ == '__main__':
     #n为生成和领水地址数量
     n=100
     for i in range(n):
-        account, mnemonic = Account.create_with_mnemonic()
-        print(mnemonic)
-        fl = FuelWallet(mnemonic=mnemonic, wallet_index=0)
-        pk, address = fl.get_address_pk()
-        print(f'address: {address}, pk: 0x{pk}')
-
-        #没有yescaptcha过验证码网站的可以在 https://yescaptcha.com/i/46I8ZF 上注册获取
-        yes_key='XXX'
-        captcha=get_yescaptcha_google_token(yes_key)
-        
-        #更新代理 需要自行购买或者配置 目前市场上很多 大家按自己需要使用
-        #以nstproxy示例 
-        #在nstproxy网站上注册获取 nstproxy_Channel 和 nstproxy_Password
-        #nstproxy_Channel='XXX'
-        #nstproxy_Password='XXX'
-        #nstproxies = f"http://{nstproxy_Channel}-residential-country_ANY-r_5m-s_BsqLCLkiVu:{nstproxy_Password}@gw-us.nstproxy.com:24125"
-        #proxies = {'all://': nstproxy}
-        proxies = {'all://': 'http://127.0.0.1:12345'}#以你的代理服务网址或ip和端口替换127.0.0.1:12345
-        
-        #print(captcha)
-        json_data = {
-                'address': address,
-                'captcha': captcha
-                    }
+        try:
+            account, mnemonic = Account.create_with_mnemonic()
+            print(mnemonic)
+            fl = FuelWallet(mnemonic=mnemonic, wallet_index=0)
+            pk, address = fl.get_address_pk()
+            print(f'address: {address}, pk: 0x{pk}')
     
-        response = requests.post('https://faucet-beta-5.fuel.network/dispense',proxies=proxies, verify=False,headers=headers, json=json_data)
-        print(response.text)
+            #没有yescaptcha过验证码网站的可以在 https://yescaptcha.com/i/46I8ZF 上注册获取
+            yes_key='XXX'
+            captcha=get_yescaptcha_google_token(yes_key)
+            
+            #更新代理 需要自行购买或者配置 目前市场上很多 大家按自己需要使用
+            #以nstproxy示例 
+            #在nstproxy网站上注册获取 nstproxy_Channel 和 nstproxy_Password
+            #nstproxy_Channel='XXX'
+            #nstproxy_Password='XXX'
+            #nstproxies = f"http://{nstproxy_Channel}-residential-country_ANY-r_5m-s_BsqLCLkiVu:{nstproxy_Password}@gw-us.nstproxy.com:24125"
+            #proxies = {'all://': nstproxy}
+            proxies = {'all://': 'http://127.0.0.1:12345'}#以你的代理服务网址或ip和端口替换127.0.0.1:12345
+            
+            #print(captcha)
+            json_data = {
+                    'address': address,
+                    'captcha': captcha
+                        }
         
-        with open('./fuel-wallet.txt', 'a') as f:
-            #将领过水的地址、私钥和助记词保存在fuel-wallet.txt文件中
-            f.writelines(address+':'+pk+':'+mnemonic+'\n')
+            response = requests.post('https://faucet-beta-5.fuel.network/dispense',proxies=proxies, verify=False,headers=headers, json=json_data)
+            print(response.text)
+            
+            with open('./fuel-wallet.txt', 'a') as f:
+                #将领过水的地址、私钥和助记词保存在fuel-wallet.txt文件中
+                f.writelines(address+':'+pk+':'+mnemonic+'\n')
+        except Exception as e:
+            print(e)
