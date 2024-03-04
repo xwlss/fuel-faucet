@@ -4,9 +4,11 @@
 
 2.将获取的key在faucet.py文件中替换232行中yes_key='XXX' 的XXX ，修改n为一次想要生成和领水的地址数量。
 
-3.在python3.10版本下运行 python3 faucet.py，如果显示Error：No module named 'XXX' ,请在cmd下运行 pip install XXX，如果是别的报错请自己查询谷歌或者百度，windows下似乎比较麻烦，涉及问题较多，大家自行尝试，mac和linux下运行较为顺畅。
+3.(新增）fuel龙头更新规则，同一ip重复领水将被拒绝，因此需要使用动态ip，没有的可以注册使用[nstproxy register](https://app.nstproxy.com/register?i=EM00Pe).完成后在238行处替换nstproxy_Channel的XXX，239行处替换nstproxy_Password的XXX，删除238，239，240，241行的‘#‘，再删除掉242行即可，或者直接咨询所用代理的客服帮忙配置。
 
-4.运行完成后相关地址、私钥和助记词都会保存在fuel-wallet.txt文件中，请妥善保存。
+4.在python3.10版本下运行 python3 faucet.py，如果显示Error：No module named 'XXX' ,请在cmd下运行 pip install XXX，如果是别的报错请自己查询谷歌或者百度，windows下似乎比较麻烦，涉及问题较多，大家自行尝试，mac和linux下运行较为顺畅。
+
+5.运行完成后相关地址、私钥和助记词都会保存在fuel-wallet.txt文件中，请妥善保存。
 
 # fuelwallet-py
 python for blockchain fuel official wallet, suport use mnemonic seeds generate fuel address and private key
