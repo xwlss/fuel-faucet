@@ -221,7 +221,7 @@ if __name__ == '__main__':
     #mnemonic = 'awkward smoke lab sauce reward invite job scene amused cement ordinary depend'
     #n为生成和领水地址数量
     n=100
-    for wallet_index in range(n):
+    for i in range(n):
         account, mnemonic = Account.create_with_mnemonic()
         print(mnemonic)
         fl = FuelWallet(mnemonic=mnemonic, wallet_index=0)
