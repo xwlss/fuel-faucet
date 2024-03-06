@@ -230,7 +230,7 @@ if __name__ == '__main__':
             print(f'address: {address}, pk: 0x{pk}')
     
             #没有yescaptcha过验证码网站的可以在 https://yescaptcha.com/i/46I8ZF 上注册获取
-            yes_key='XXX'
+            yes_key='6f032029f046de675999a6fda3017b689b80a49836319'
             captcha=get_yescaptcha_google_token(yes_key)
             
             #更新代理 需要自行购买或者配置 目前市场上很多 大家按自己需要使用
