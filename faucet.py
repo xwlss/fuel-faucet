@@ -195,7 +195,7 @@ def get_nocaptcha_google_token(no_captcha_client_key: str):
     print(response)
     if response.get('status') == 1:
         if response.get('msg') == '验证成功':
-            return response['data']['generated_pass_UUID']
+            return response['data']['token']
     return False
 
 def get_nocaptcha_cloudflare_cookies(no_captcha_client_key,proxies):
@@ -254,7 +254,7 @@ if __name__ == '__main__':
                     'address': address,
                     'captcha': captcha
                         }
-            cookies=get_nocaptcha_cloudflare_cookies(nocap_key,proxies)
+            cookies=get_nocaptcha_cloudflare_cookies(nocap_key,proxy)
             proxies={'all://':f'http://{proxy}'}
             response = requests.post('https://faucet-beta-5.fuel.network/dispense',proxies=proxies, cookies=cookies,verify=False,headers=headers, json=json_data)
             print(response.text)
