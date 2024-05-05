@@ -180,7 +180,7 @@ class FuelWallet():
         return pk.hex(), address
 
 def get_nocaptcha_google_token(no_captcha_client_key: str):
-    headers = {'User-Token': no_captcha_api_token, 'Content-Type': 'application/json', 'Developer-Id': 'CiKFW5'}
+    headers = {'User-Token': no_captcha_client_key, 'Content-Type': 'application/json', 'Developer-Id': 'CiKFW5'}
     json_data = {
                 'referer': 'https://faucet-beta-5.fuel.network/',
                 'title':'Fuel Faucet',
@@ -199,7 +199,7 @@ def get_nocaptcha_google_token(no_captcha_client_key: str):
     return False
 
 def get_nocaptcha_cloudflare_cookies(no_captcha_client_key,proxies):
-    headers = {'User-Token': no_captcha_api_token, 'Content-Type': 'application/json', 'Developer-Id': 'CiKFW5'}
+    headers = {'User-Token': no_captcha_client_key, 'Content-Type': 'application/json', 'Developer-Id': 'CiKFW5'}
     json_data = {
     'href': 'https://faucet-beta-5.fuel.network/',
     'proxy':proxies
