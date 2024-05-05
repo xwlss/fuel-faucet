@@ -179,41 +179,49 @@ class FuelWallet():
 
         return pk.hex(), address
 
-def get_yescaptcha_google_token(yes_captcha_client_key: str):
-    json_data = {"clientKey": yes_captcha_client_key,
-                 "task": {"websiteURL": "https://faucet-beta-5.fuel.network/",
-                          "websiteKey": "6Ld3cEwfAAAAAMd4QTs7aO85LyKGdgj0bFsdBfre",
-                          "type": "NoCaptchaTaskProxyless"}, "softID": 33395}
-    response = requests.post(url='https://api.yescaptcha.com/createTask', json=json_data).json()
-    if response['errorId'] != 0:
-        raise ValueError(response)
-    task_id = response['taskId']
-    time.sleep(5)
-    for _ in range(30):
-        data = {"clientKey": yes_captcha_client_key, "taskId": task_id}
-        response = requests.post(url='https://api.yescaptcha.com/getTaskResult', json=data).json()
-        if response['status'] == 'ready':
-            return response['solution']['gRecaptchaResponse']
-        else:
-            print('waiting',_)
-            time.sleep(2)
-    #logger.warning(response)
+def get_nocaptcha_google_token(no_captcha_client_key: str):
+    headers = {'User-Token': no_captcha_api_token, 'Content-Type': 'application/json', 'Developer-Id': 'CiKFW5'}
+    json_data = {
+                'referer': 'https://faucet-beta-5.fuel.network/',
+                'title':'Fuel Faucet',
+                'size':'normal',
+                'sitekey':'6Ld3cEwfAAAAAMd4QTs7aO85LyKGdgj0bFsdBfre'
+        }
+
+
+
+    response = requests.post(url='http://api.nocaptcha.io/api/wanda/recaptcha/universal', headers=headers,
+                             json=json_data).json()
+    print(response)
+    if response.get('status') == 1:
+        if response.get('msg') == '验证成功':
+            return response['data']['generated_pass_UUID']
     return False
+
+def get_nocaptcha_cloudflare_cookies(no_captcha_client_key,proxies):
+    headers = {'User-Token': no_captcha_api_token, 'Content-Type': 'application/json', 'Developer-Id': 'CiKFW5'}
+    json_data = {
+    'href': 'https://faucet-beta-5.fuel.network/',
+    'proxy':proxies
+    }
+
+    response = requests.post(url='http://api.nocaptcha.io/api/wanda/cloudflare/universal', headers=headers,
+                             json=json_data).json()
+    print(response)
+    if response.get('status') == 1:
+        if response.get('msg') == '验证成功':
+            return response['data']['cookies']
+    return False
+
+
 
 headers = {
     'accept': 'application/json',
     'accept-language': 'zh-CN,zh;q=0.9',
     'content-type': 'application/json',
-    # 'cookie': '_ga=GA1.1.48631564.1709429630; _ga_ZQ7WZ2BGSE=GS1.1.1709429630.1.0.1709429916.0.0.0',
     'origin': 'https://faucet-beta-5.fuel.network',
     'priority': 'u=1, i',
     'referer': 'https://faucet-beta-5.fuel.network/',
-    'sec-ch-ua': '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-platform': '"macOS"',
-    'sec-fetch-dest': 'empty',
-    'sec-fetch-mode': 'cors',
-    'sec-fetch-site': 'same-origin',
     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
 }
 if __name__ == '__main__':
@@ -228,27 +236,27 @@ if __name__ == '__main__':
             fl = FuelWallet(mnemonic=mnemonic, wallet_index=0)
             pk, address = fl.get_address_pk()
             print(f'address: {address}, pk: 0x{pk}')
-    
-            #没有yescaptcha过验证码网站的可以在 https://yescaptcha.com/i/46I8ZF 上注册获取
-            yes_key='XXX'
-            captcha=get_yescaptcha_google_token(yes_key)
             
             #更新代理 需要自行购买或者配置 目前市场上很多 大家按自己需要使用
             #以nstproxy示例 
             #在nstproxy网站上注册获取 nstproxy_Channel 和 nstproxy_Password
             #nstproxy_Channel='XXX'
             #nstproxy_Password='XXX'
-            #nstproxies = f"http://{nstproxy_Channel}-residential-country_ANY-r_5m-s_BsqLCLkiVu:{nstproxy_Password}@gw-us.nstproxy.com:24125"
-            #proxies = {'all://': nstproxy}
-            proxies = {'all://': 'http://127.0.0.1:12345'}#以你的代理服务网址或ip和端口替换127.0.0.1:12345
+            #nstproxies = f"{nstproxy_Channel}-residential-country_ANY-r_5m-s_BsqLCLkiVu:{nstproxy_Password}@gw-us.nstproxy.com:24125"
+            #proxy = 'all://': nstproxy
+            proxy = 'name:pass@127.0.0.1:12345'#以你的代理服务网址或ip和端口替换127.0.0.1:12345
             
+            #没有nocaptcha过验证码网站的可以在 https://www.nocaptcha.io/register?c=CiKFW5 上注册获取
+            nocap_key='XXX'
+            captcha=get_nocaptcha_google_token(nocap_key)
             #print(captcha)
             json_data = {
                     'address': address,
                     'captcha': captcha
                         }
-        
-            response = requests.post('https://faucet-beta-5.fuel.network/dispense',proxies=proxies, verify=False,headers=headers, json=json_data)
+            cookies=get_nocaptcha_cloudflare_cookies(nocap_key,proxies)
+            proxies={'all://':f'http://{proxy}'}
+            response = requests.post('https://faucet-beta-5.fuel.network/dispense',proxies=proxies, cookies=cookies,verify=False,headers=headers, json=json_data)
             print(response.text)
             
             with open('./fuel-wallet.txt', 'a') as f:
